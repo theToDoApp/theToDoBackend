@@ -1,0 +1,12 @@
+package com.project.todo.config;
+import java.util.Map;
+
+import com.project.todo.model.User;
+
+
+
+public interface JwtGeneratorInterface {
+
+	Map<String, String> generateToken(String phoneNumber);
+	}
+

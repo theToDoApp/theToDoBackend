@@ -1,0 +1,5 @@
+package com.project.todo.repository;
+
+public interface LoginRepository {
+
+}

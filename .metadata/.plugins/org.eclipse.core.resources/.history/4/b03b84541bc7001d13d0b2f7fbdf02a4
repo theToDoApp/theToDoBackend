@@ -1,0 +1,14 @@
+package com.project.todo.service;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+import com.project.todo.exception.ResourceNotFoundException;
+
+import com.project.todo.model.User;
+@Service
+public interface UserService{
+
+	public void saveUser(User user);
+    public Optional<User> getUserByPhoneNumber(Long phoneNumber) throws ResourceNotFoundException;
+}

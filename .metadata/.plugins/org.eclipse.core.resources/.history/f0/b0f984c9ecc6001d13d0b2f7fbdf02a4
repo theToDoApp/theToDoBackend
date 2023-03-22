@@ -1,0 +1,5 @@
+package com.project.todo.config;
+
+public class MySecurityConfig {
+
+}

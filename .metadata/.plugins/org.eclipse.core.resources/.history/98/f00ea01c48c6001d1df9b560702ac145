@@ -1,0 +1,34 @@
+package com.project.todo.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="users")
+public class Login {
+
+	@Id
+	@Column(name="phone_number")
+	private String phoneNumber;
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public Login(String phoneNumber) {
+		super();
+		this.phoneNumber = phoneNumber;
+	}
+	public Login()
+	{
+		
+	}
+	
+	
+}

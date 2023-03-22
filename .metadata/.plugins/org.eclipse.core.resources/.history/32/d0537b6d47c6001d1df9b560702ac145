@@ -1,0 +1,5 @@
+package com.project.todo.exception;
+
+public class ResourceNotFoundException {
+
+}
