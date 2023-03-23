@@ -1,0 +1,27 @@
+package com.project.todo.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+import jakarta.annotation.security.PermitAll;
+
+@Configuration
+public class SecurityConfig {
+	
+	@Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception
+	{
+		httpSecurity.csrf().disable()
+		.authorizeHttpRequests()
+		.requestMatchers("/signin")
+		.permitAll()
+		.anyRequest()
+		.authenticated()
+		.and()
+		.formLogin();
+		
+		return httpSecurity.build();
+	}
+}
