@@ -1,0 +1,89 @@
+package com.project.todo.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.project.todo.service.UserServiceImpl;
+
+import jakarta.annotation.security.PermitAll;
+
+@Configuration
+@EnableMethodSecurity
+@EnableWebMvc
+public class SecurityConfig {
+	
+	@Autowired
+	UserServiceImpl userServiceImpl;
+	
+	public PasswordEncoder passwordEncoder()
+	{
+		return new BCryptPasswordEncoder();
+	}
+	
+	public DaoAuthenticationProvider daoauthenticationProvider()
+	{
+		DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
+		provider.setUserDetailsService(this.userServiceImpl);
+		provider.setPasswordEncoder(passwordEncoder());
+		return provider;
+		
+	}
+	@Bean
+	public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception
+	{
+		return configuration.getAuthenticationManager();
+	}
+	
+	@Bean
+	public UserDetailsService userDetailsService()
+	{
+		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        UserDetails normalUser = User.withUsername("sri")
+            .password(encoder.encode("sri"))
+            .roles("USER")
+            .build();
+        
+        UserDetails adminUser = User.withUsername("aju")
+            .password(encoder.encode("aju"))
+            .roles("ADMIN")
+            .build();
+        
+		
+		return new  InMemoryUserDetailsManager(normalUser,adminUser);
+	}
+	
+	@Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception
+	{
+		httpSecurity.csrf().disable()
+		.authorizeHttpRequests()
+		.requestMatchers("/api/v1/admin")
+		.hasRole("ADMIN")
+		.requestMatchers("/api/v1/normal")
+		.hasRole("USER")
+		.requestMatchers("/api/v1/home")
+		.permitAll()
+		.anyRequest()
+		.authenticated()
+		.and()
+		.formLogin();
+		
+		httpSecurity.authenticationProvider(daoauthenticationProvider());
+		return httpSecurity.build();
+	}
+}

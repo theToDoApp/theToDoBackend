@@ -10,7 +10,7 @@ import com.project.todo.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,String>{
 
-	Optional<User> findByPhoneNumber(String phoneNumber);
+	User findByPhoneNumber(String phoneNumber);
 	
 	
 

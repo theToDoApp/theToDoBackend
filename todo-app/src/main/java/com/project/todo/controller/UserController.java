@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,13 +42,13 @@ public class UserController {
 		return ResponseEntity.ok("Welcome to our website! You are public user");
 	}
 	
-	@PreAuthorize("hasRole('Admin')")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/admin")
 	public ResponseEntity<String>admin()
 	{
 		return ResponseEntity.ok("Welcome to our website! You are admin user");
 	}
-	@PreAuthorize("hasRole('Normal')")
+	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/normal")
 	public ResponseEntity<String>normal()
 	{
@@ -57,7 +58,7 @@ public class UserController {
 	
 	
 	@PostMapping("/login/{id}")
-	public ResponseEntity<Optional<User>>login(@PathVariable("id") String phoneNumber)
+	public ResponseEntity<UserDetails>login(@PathVariable("id") String phoneNumber)
 	{
 		try 
 		{
@@ -65,7 +66,7 @@ public class UserController {
 		      throw new ResourceNotFoundException("Phone Number is Empty");
 		      }
 		
-		Optional<User> userData=userService.getUserByPhoneNumber(phoneNumber);
+		UserDetails userData=userService.loadUserByUsername(phoneNumber);
 		
 		if(userData == null){
 		       throw new ResourceNotFoundException("Phone Number is Invalid");

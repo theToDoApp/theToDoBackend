@@ -1,14 +1,14 @@
 package com.project.todo.service;
 
-import java.util.Optional;
-
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import com.project.todo.exception.ResourceNotFoundException;
-
 import com.project.todo.model.User;
 @Service
 public interface UserService{
 
 	public void saveUser(User user);
-    public Optional<User> getUserByPhoneNumber(String phoneNumber) throws ResourceNotFoundException;
+//    public User getUserByPhoneNumber(String phoneNumber) throws ResourceNotFoundException;
+	
+	UserDetails loadUserByUsername(String username);
+	
 }
